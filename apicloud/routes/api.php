@@ -3,16 +3,20 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-//primero es el proyecto, luego la creacion de los arboles
-
-//projects
-
 Route::post('register', 'AuthController@register');
 Route::post('login', 'AuthController@login');
 Route::post('recover', 'AuthController@recover');
-Route::resource('/products', 'ProductsController')->except(['create', 'edit']);
-Route::resource('/projects', 'ProjectsController')->except(['create', 'edit']);
-Route::resource('/products/trees', 'TreesController')->except(['create', 'edit']);
+Route::get('index','AuthController@index');
+
+//rutas para manejo de arboles, etc
+Route::get('/idProyecto/{id}','TreesController@idProyecto');
+
+
+Route::resource('/users','AuthController');
+Route::resource('/projects', 'ProjectsController');
+Route::resource('/trees','TreesController');
+
+//
 Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('logout', 'AuthController@logout');
     
@@ -20,6 +24,5 @@ Route::group(['middleware' => ['jwt.auth']], function() {
         return response()->json(['foo'=>'bar']);
     });
 
-    //Route::get('/categorias/select', 'CategoriaController@select');
 });
 

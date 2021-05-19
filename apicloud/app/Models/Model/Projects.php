@@ -9,12 +9,13 @@ class Projects extends Model
 {
     public $table = "projects";
 
-    protected $fillable = [
-        'fecha',
+    protected $fillable = [        
         'name', 
+        'fecha',
         'region',
         'provincia',
-        'distrito'
+        'distrito',
+        'user_id'
     ];
     
     public $timestamps = false;

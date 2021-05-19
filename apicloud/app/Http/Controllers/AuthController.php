@@ -14,13 +14,43 @@ class AuthController extends Controller {
     
     public $loginAfterSignUp = true;
 
+
+
+    public function index()
+    {
+ 
+    //para 
+    $users = User::select("users.*")->get()->toArray();
+
+                return response()->json($users);
+    }
+
+    public function show($nombre,$password)
+    {
+        $users = User::select("users.*")
+            ->where("users.name", $nombre,"users.password",$password)
+            ->first();
+        return response()->json([
+            "ok" => true,
+           "data" => $users,            
+        ]);
+    }
+    /*
+    public function getIdUser(String $nombre, String $pass){
+        $idUser = DB::select('SELECT id FROM users WHERE name = $nombre and password=$pass');
+        dd($idUser);
+    }*/
+
+    //funcion para registrar usuario
+
     public function register(Request $request) {
         $user = new User();
         $user->name = $request->name;
         $user->fullname = $request->fullname;
         $user->profession = $request->profession;
         $user->cellphone = $request->cellphone;
-        $user->password = bcrypt($request->password);
+        $user->password = $request->password;
+        //$user->password = bcrypt($request->password);
         $user->save();
         if ($this->loginAfterSignUp) {
             return $this->login($request);
@@ -37,7 +67,7 @@ class AuthController extends Controller {
         if (!$jwt_token = JWTAuth::attempt($input)) {
             return response()->json([
                 'status' => 'invalid_credentials',
-                'message' => 'Correo o contraseña no válidos.',
+                'message' => 'Contraseña no válida.',
             ], 401);
         }
 

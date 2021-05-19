@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Model\Trees;
+use App\Models\Model\Projects;
 use Validator;
 
 class TreesController extends Controller
@@ -11,10 +12,22 @@ class TreesController extends Controller
     //funcion que me devuelve los arboles ya registrados
     public function index()
     {
-    $trees = Trees::select("trees.*")->get()->toArray();
+        $trees = Trees::select("trees.*")->get()->toArray();
 
-                return response()->json($trees);
+        return response()->json($trees);
     }
+
+    public function getTrees(Request $request,$id){
+        
+        $trees = Trees::select("trees.*")
+             ->where("trees.project_id",'=',$id);
+        
+             if($request->ajax()){
+            $trees = Trees::treess($id)->get()->toArray(); 
+            return response()->json($trees);
+        }
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -28,15 +41,14 @@ class TreesController extends Controller
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-            'id_project'=>'required|numeric',
-            'nombre_comun'=>'required|unique:trees|max:100',
-            'nombre_cientifico'=>'required|unique:trees|max:100',
+            'project_id'=>'required|numeric',
+            'nombre_comun'=>'required|max:255',
+            'nombre_cientifico'=>'required|max:255',
             'altura'=>'required|numeric',
             'coor_este'=>'required|numeric',
             'coor_norte'=>'required|numeric',
-            'observaciones'=>'required',
-            'fecha'=>'required|date'
-            
+            'observaciones'=>'required|max:255',
+            'fecha'=>'required|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -71,13 +83,14 @@ class TreesController extends Controller
      public function show($id)
      {
          $trees = Trees::select("trees.*")
-             ->where("trees.id", $id)
-             ->first();
+             ->where("trees.project_id", $id)
+             ->get();
          return response()->json([
              "ok" => true,
             "data" => $trees,            
          ]);
      }
+
      /**
       * Update the specified resource in storage.
       *
@@ -91,14 +104,14 @@ class TreesController extends Controller
          $input = $request->all();
          $validator = Validator::make($input, [
 
-            'id_project'=>'required|numeric',
-            'nombre_comun'=>'required|unique:trees|max:100',
-            'nombre_cientifico'=>'required|unique:trees|max:100',
+            'project_id'=>'required|numeric',
+            'nombre_comun'=>'required|max:100',
+            'nombre_cientifico'=>'required|max:250',
             'altura'=>'required|numeric',
             'coor_este'=>'required|numeric',
             'coor_norte'=>'required|numeric',
-            'observaciones'=>'required',
-            'fecha'=>'required|date'
+            'observaciones'=>'required|max:250',
+            'fecha'=>'required|max:255'
          ]);
          if ($validator->fails()) {
              return response()->json([

@@ -12,7 +12,7 @@ class ProjectsController extends Controller
     {
  
     //para 
-    $trees = Trees::select("projects.*")->get()->toArray();
+    $projects = Projects::select("projects.*")->get()->toArray();
 
                 return response()->json($projects);
     }
@@ -30,12 +30,12 @@ class ProjectsController extends Controller
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-            
-            'fecha'=>'required|date',
-            'name'=>'required|255', 
-            'region'=>'required|255',
-            'provincia'=>'required|255',
-            'distrito'=>'required|255'
+            'name'=>'required|max:100', 
+            'fecha'=>'required|max:100',
+            'region'=>'required|max:100',
+            'provincia'=>'required|max:100',
+            'distrito'=>'required|max:100',
+            'user_id' =>'required|numeric'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -54,7 +54,7 @@ class ProjectsController extends Controller
                 "ok" => false,
                 "error" => $ex->getMessage(),
             ]);
-        }
+        } 
     }
     /**
      * Display the specified resource.
@@ -84,14 +84,15 @@ class ProjectsController extends Controller
 
      //actualizar
     public function update(Request $request, $id)
-    {
+    { 
         $input = $request->all();
         $validator = Validator::make($input, [
-            'fecha'=>'required|date',
-            'name'=>'required|255', 
-            'region'=>'required|255',
-            'provincia'=>'required|255',
-            'distrito'=>'required|255'
+            'name'=>'required|max:100',
+            'fecha'=>'required|max:100',
+            'region'=>'required|max:100',
+            'provincia'=>'required|max:100',
+            'distrito'=>'required|max:100',
+            'user_id'=>'required|numeric'
         ]);
         if ($validator->fails()) {
             return response()->json([

@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
         $table->string('password');
         $table->timestamps();
     });
- }
+ } 
  /**
  * Reverse the migrations.
  *

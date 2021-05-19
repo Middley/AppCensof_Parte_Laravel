@@ -10,7 +10,7 @@ class Trees extends Model
     public $table = "trees";
 
     protected $fillable = [
-        'id_project',
+        'project_id',
         'nombre_comun', 
         'nombre_cientifico', 
         'altura',
@@ -21,4 +21,9 @@ class Trees extends Model
     ];
     
     public $timestamps = false;
+
+
+    public static function treess($id){
+        return Trees::where('trees.project_id','=',$id);
+    }
 }

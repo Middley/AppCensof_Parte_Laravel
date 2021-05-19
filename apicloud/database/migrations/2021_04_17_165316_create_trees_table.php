@@ -21,8 +21,8 @@ class CreateTreesTable extends Migration
             $table->integer('altura');
             $table->integer('coor_este');
             $table->integer('coor_norte');
-            $table->text('observaciones');
-            $table->date('fecha');
+            $table->String('observaciones');
+            $table->string('fecha');
             $table->foreign('project_id')->references('id')->on('projects');
             $table->timestamps();
         });

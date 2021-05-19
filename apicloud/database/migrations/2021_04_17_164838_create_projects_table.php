@@ -16,12 +16,14 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->String('name');
-            $table->date('fecha');
+            $table->String('fecha');
             $table->String('region');
             $table->String('provincia');
             $table->String('distrito');
+            $table->unsignedBigInteger('user_id');//definimos asi para que no tome 2 pk
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
-        });
+        }); 
     }
 
     /**
